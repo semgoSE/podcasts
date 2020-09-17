@@ -6,43 +6,64 @@ import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
-import { PanelHeader, Panel, Div, Placeholder, Root, Button, PanelHeaderBack, Input, FormLayout, Card, SimpleCell, Textarea, Separator, Checkbox } from '@vkontakte/vkui';
+import { PanelHeader, Panel, Div, Placeholder, Root, Button, PanelHeaderBack, Input, FormLayout, Card, SimpleCell, Textarea, Separator, Checkbox, Avatar, File, RichCell, Link, Group, Header, Text, List, FixedLayout } from '@vkontakte/vkui';
 import { Icon56AddCircleOutline, Icon56GalleryOutline } from '@vkontakte/icons';
 
 class App extends Component {
 	state = {
 		activePanel: 'home',
 		form: {
-
+			podcast: {			//здесь хранится подкаст
+				timecode: [
+					{time: '00:20', title: "Основная тема подкаста"}
+				], 	//массив time кодов
+				mp3: 0		//сам подкаст
+			}
 		},
 	}
 
-	go = (activePanel) => {
+	go = (activePanel) => { //смена панелей
 		this.setState({ activePanel})
 	}
 
+	onChange = (e) => { 
+		const { name, value } = e.currentTarget;
+		this.setState({ form: { ...this.state.form, [name]: value }});
+	}
+	
+	onChangeFile = (input) => {	//хагрузка картинки
+		const { form } = this.state;
+		if (input.currentTarget.files && input.currentTarget.files[0]) {
+			var reader = new FileReader();
+			reader.onload = async (e) => {
+			await this.setState({ form:{...form, img: e.target.result}})
+			};
+			reader.readAsDataURL(input.currentTarget.files[0]);
+	}
+}
+
 	render() {
-		const { user, activePanel} = this.state;
+		const { user, activePanel, form} = this.state;
 		return (
 			<Root>
 				<View activePanel={activePanel}>
 					<Panel id='home'>
 						<PanelHeader>Подкасты</PanelHeader>
-						<Placeholder action={<Button onClick={() => this.go('create_podcats_1')}>Добавить подкаст</Button>} header="Добавьте первый подкаст" icon={<Icon56AddCircleOutline />} stretched>
+						<Placeholder action={<Button onClick={() => this.go('create_podcats')}>Добавить подкаст</Button>} header="Добавьте первый подкаст" icon={<Icon56AddCircleOutline />} stretched>
 							Добавляйте, редактируйте и делитесь подкастами вашего сообщества.
 						</Placeholder>
 					</Panel>
 
-					<Panel id='create_podcats_1'>
+					<Panel id='create_podcats'>
 						<PanelHeader left={<PanelHeaderBack onClick={() => this.go('home')}/>}>Новый подкаст</PanelHeader>
-						<SimpleCell disabled before={<Card mode='tint'><div><Icon56GalleryOutline fill="var(--accent)"/></div></Card>}>
-							<FormLayout><Input placeholder='Введите название подкаста' top="Название"/></FormLayout>
+						<SimpleCell disabled before={form.img  ? <Avatar src={form.img} size={72} mode='image' /> : <File mode='secondary' style={{ height: 72, width:72, display: 'flex', alignItems: 'center', justifyContent: 'center'}} controlSize='m' onChange={this.onChangeFile}><Icon56GalleryOutline width={28} height={28}/></File>}>
+							<FormLayout><Input value={form.name} name="name" onChange={this.onChange} placeholder='Введите название подкаста' top="Название"/></FormLayout>
 						</SimpleCell>
 						<FormLayout>
-							<Textarea top="Описание подкаста"/>
+							<Textarea value={form.description} name="description" onChange={this.onChange} top="Описание подкаста"/>
 						</FormLayout>
 						<Div>
-							<Placeholder action={<Button mode='outline'>Загрузить файл</Button>} header="Загрузите Ваш подкаст">Выберите готовый аудиофайл из вашего телефона и добавьте его</Placeholder>
+							<Placeholder action={<File mode='outline'>Загрузить файл</File>} header="Загрузите Ваш подкаст">Выберите готовый аудиофайл из вашего телефона и добавьте его</Placeholder>
 						</Div>
 						<Separator />
 						<FormLayout>
@@ -50,12 +71,43 @@ class App extends Component {
 							<Checkbox>Исключить эпизод из экспорта</Checkbox>
 							<Checkbox defaultChecked>Трейлер подкаста</Checkbox>
 						</FormLayout>
-						<SimpleCell description="Всем пользователям">Кому доступен данный подкаст</SimpleCell>
+						<SimpleCell expandable description="Всем пользователям">Кому доступен данный подкаст</SimpleCell>
 						<SimpleCell multiline description="При публикации записи с эпизодом, он становится доступным для всех пользователей">
 						</SimpleCell>
 						<Div>
-							<Button size='xl'>Дальше</Button>
+							<Button size='xl' onClick={() => this.go('snippet')} disabled={form.img == null || form.name == null || form.description == null, form.podcast.mp3 == null}>Дальше</Button>
 						</Div>
+					</Panel>
+
+					<Panel id='snippet'>
+						<PanelHeader left={<PanelHeaderBack onClick={() => this.go('create_podcats')}/>}>Новый подкаст</PanelHeader>
+						<Group>
+							<RichCell text={<Link>ПараDogs</Link>} caption={"Длительность: 59:16"} before={<Avatar size={72} mode='image' src={form.img}/>}>
+								{form.name}
+							</RichCell>
+						</Group>
+						<Group header={<Header>Описание</Header>}>
+							<Div style={{ paddingTop: 0}}>
+								<Text>
+								{form.description}
+								</Text>
+							</Div>
+						</Group>
+						<Group header={<Header>Содержание</Header>}>
+							<List>
+								{form.podcast.timecode.map(timecode => 
+									<SimpleCell><Link>{timecode.time}</Link> — {timecode.title}</SimpleCell>
+								)}
+							</List>
+							
+						</Group>
+						
+						<FixedLayout vertical='bottom'>
+							<Separator />
+							<Div>
+								<Button size='xl'>Опубликовать подкаст</Button>
+							</Div>
+						</FixedLayout>
 					</Panel>
 				</View>
 			</Root>
