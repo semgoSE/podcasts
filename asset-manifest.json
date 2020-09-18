@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/podcasts/static/css/main.981f7211.chunk.css",
+    "main.js": "/podcasts/static/js/main.3df306d1.chunk.js",
+    "main.js.map": "/podcasts/static/js/main.3df306d1.chunk.js.map",
+    "runtime-main.js": "/podcasts/static/js/runtime-main.5622a152.js",
+    "runtime-main.js.map": "/podcasts/static/js/runtime-main.5622a152.js.map",
+    "static/css/2.09e62520.chunk.css": "/podcasts/static/css/2.09e62520.chunk.css",
+    "static/js/2.f105a708.chunk.js": "/podcasts/static/js/2.f105a708.chunk.js",
+    "static/js/2.f105a708.chunk.js.map": "/podcasts/static/js/2.f105a708.chunk.js.map",
+    "index.html": "/podcasts/index.html",
+    "precache-manifest.57199e945d5e7a7cab0de1927eb74f54.js": "/podcasts/precache-manifest.57199e945d5e7a7cab0de1927eb74f54.js",
+    "service-worker.js": "/podcasts/service-worker.js",
+    "static/css/2.09e62520.chunk.css.map": "/podcasts/static/css/2.09e62520.chunk.css.map",
+    "static/css/main.981f7211.chunk.css.map": "/podcasts/static/css/main.981f7211.chunk.css.map",
+    "static/media/persik.png": "/podcasts/static/media/persik.4e1ec840.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5622a152.js",
+    "static/css/2.09e62520.chunk.css",
+    "static/js/2.f105a708.chunk.js",
+    "static/css/main.981f7211.chunk.css",
+    "static/js/main.3df306d1.chunk.js"
+  ]
+}
