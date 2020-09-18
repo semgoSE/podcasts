@@ -7,17 +7,20 @@ import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Persik from './panels/Persik';
 import { PanelHeader, Panel, Div, Placeholder, Root, Button, PanelHeaderBack, Input, FormLayout, Card, SimpleCell, Textarea, Separator, Checkbox, Avatar, File, RichCell, Link, Group, Header, Text, List, FixedLayout } from '@vkontakte/vkui';
-import { Icon56AddCircleOutline, Icon56GalleryOutline } from '@vkontakte/icons';
+import { Icon56AddCircleOutline, Icon56CheckCircleOutline, Icon56GalleryOutline } from '@vkontakte/icons';
 
 class App extends Component {
 	state = {
 		activePanel: 'home',
 		form: {
+			name: null,
+			description: null,
+			img:null,
 			podcast: {			//здесь хранится подкаст
 				timecode: [
 					{time: '00:20', title: "Основная тема подкаста"}
 				], 	//массив time кодов
-				mp3: 0		//сам подкаст
+				mp3: 'code'		//сам подкаст
 			}
 		},
 	}
@@ -75,7 +78,7 @@ class App extends Component {
 						<SimpleCell multiline description="При публикации записи с эпизодом, он становится доступным для всех пользователей">
 						</SimpleCell>
 						<Div>
-							<Button size='xl' onClick={() => this.go('snippet')} disabled={form.img == null || form.name == null || form.description == null, form.podcast.mp3 == null}>Дальше</Button>
+							<Button size='xl' onClick={() => this.go('snippet')} disabled={form.img == '' || form.name == '' || form.description == '', form.podcast.mp3 == ''}>Дальше</Button>
 						</Div>
 					</Panel>
 
@@ -105,9 +108,16 @@ class App extends Component {
 						<FixedLayout vertical='bottom'>
 							<Separator />
 							<Div>
-								<Button size='xl'>Опубликовать подкаст</Button>
+								<Button size='xl' onClick={() => this.go('publish')}>Опубликовать подкаст</Button>
 							</Div>
 						</FixedLayout>
+					</Panel>
+
+					<Panel id='publish'>
+							<PanelHeader>Подкасты</PanelHeader>
+							<Placeholder action={<Button>Поделиться подкастом</Button>} icon={<Icon56CheckCircleOutline fill="var(--accent)"/>} header="Подкаст добавлен" stretched>
+							Раскажите своим подписчикам о новом подкасте, чтобы получить больше слушателей.
+							</Placeholder>
 					</Panel>
 				</View>
 			</Root>
